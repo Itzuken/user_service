@@ -10,16 +10,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import com.example.user_service.services.KafkaProducerService;
+
 
 @Service
 @Transactional
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
+    private final KafkaProducerService kafkaProducerService;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserServiceImpl(UserRepository userRepository, KafkaProducerService kafkaProducerService) {
         this.userRepository = userRepository;
+        this.kafkaProducerService = kafkaProducerService;
     }
 
     @Override
@@ -42,6 +46,8 @@ public class UserServiceImpl implements UserService {
         }
         User user = convertToEntity(userRequestDTO);
         User savedUser = userRepository.save(user);
+        kafkaProducerService.sendUserEvent("CREATE", savedUser.getEmail(), savedUser.getName());
+
         return convertToDTO(savedUser);
     }
 
@@ -62,10 +68,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new RuntimeException("User not found: " + id);
-        }
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found: " + id));
+        String userEmail = user.getEmail();
+        String userName = user.getName();
+
         userRepository.deleteById(id);
+        kafkaProducerService.sendUserEvent("DELETE", userEmail, userName);
     }
 
     private UserResponseDTO convertToDTO(User user) {

@@ -1,14 +1,19 @@
 package com.example.user_service.dto;
 
-
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.hateoas.RepresentationModel;
+import org.springframework.hateoas.server.core.Relation;
 import java.time.LocalDateTime;
 
-public class UserResponseDTO {
+@Relation(collectionRelation = "users", itemRelation = "user")
+public class UserResponseDTO extends RepresentationModel<UserResponseDTO> {
     private Long id;
     private String name;
     private String email;
     private Integer age;
+    @JsonProperty("created_at")
     private LocalDateTime createdAt;
+    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     public UserResponseDTO() {}
@@ -23,7 +28,6 @@ public class UserResponseDTO {
         this.updatedAt = updatedAt;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }

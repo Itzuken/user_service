@@ -1,3 +1,13 @@
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+    filter: true
+
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/aston_db
@@ -14,14 +24,10 @@ spring:
         format_sql: true
         dialect: org.hibernate.dialect.PostgreSQLDialect
 
-  sql:
-    init:
-      mode: always
-
 server:
   port: 8080
 
 logging:
   level:
-    org.springframework.web: DEBUG
-    com.example.user_service: DEBUG
+    com.example.userservice: DEBUG
+    org.springframework.hateoas: DEBUG

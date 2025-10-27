@@ -62,12 +62,10 @@ public class UserServiceImpl implements UserService {
         User existingUser = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
 
-        // Check if email is taken by another user
         if (userRepository.existsByEmailAndIdNot(userRequestDTO.getEmail(), id)) {
             throw new RuntimeException("Email already exists: " + userRequestDTO.getEmail());
         }
 
-        // Update user fields
         existingUser.setName(userRequestDTO.getName());
         existingUser.setEmail(userRequestDTO.getEmail());
         existingUser.setAge(userRequestDTO.getAge());
@@ -84,7 +82,6 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
-    // Conversion methods
     private User convertToEntity(UserRequestDTO userRequestDTO) {
         User user = new User();
         user.setName(userRequestDTO.getName());

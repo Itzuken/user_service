@@ -4,9 +4,6 @@ import com.example.user_service.dto.UserRequestDTO;
 import com.example.user_service.dto.UserResponseDTO;
 import org.springframework.hateoas.CollectionModel;
 
-
-import java.util.List;
-
 public interface UserService {
 
     CollectionModel<UserResponseDTO> getAllUsers();

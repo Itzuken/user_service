@@ -26,7 +26,6 @@ public class UserAssembler extends RepresentationModelAssemblerSupport<User, Use
                 user.getUpdatedAt()
         );
 
-        // Добавляем HATEOAS ссылки
         userResponse.add(linkTo(methodOn(UserController.class).getUserById(user.getId())).withSelfRel());
         userResponse.add(linkTo(methodOn(UserController.class).updateUser(user.getId(), null)).withRel("update"));
         userResponse.add(linkTo(methodOn(UserController.class).deleteUser(user.getId())).withRel("delete"));
